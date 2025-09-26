@@ -46,9 +46,47 @@ class Bd {
             if (despesa === null) {
                 continue
             }
+            despesa.id = i
             despesas.push(despesa)
         }
         return despesas
+    }
+    pesquisar(despesa) {
+        let despesasFiltrda = Array()
+        despesasFiltrdas = this.recuperarTodosRegistros()
+
+        console.log(despesa)
+        console.log(despesasFiltrdas)
+
+        if (despesa.ano != '') {
+            console.log('ano')
+            despesasFiltrdas = despesasFiltrdas.filter(d => d.ano == despesa.ano)
+        }
+        if (despesa.mes != '') {
+            console.log('mes')
+            despesasFiltrdas = despesasFiltrdas.filter(d => d.mes == despesa.mes)
+        }
+        if (despesa.dia != '') {
+            console.log('dia')
+            despesasFiltrdas = despesasFiltrdas.filter(d => d.dia == despesa.dia)
+        }
+        if (despesa.tipo != '') {
+            console.log('tipo')
+            despesasFiltrdas = despesasFiltrdas.filter(d => d.tipo == despesa.tipo)
+        }
+        if (despesa.descricao != '') {
+            console.log('descricao')
+            despesasFiltrdas = despesasFiltrdas.filter(d => d.descricao == despesa.descricao)
+        }
+        if (despesa.valor != '') {
+            console.log('valor')
+            despesasFiltrdas = despesasFiltrdas.filter(d => d.valor == despesa.valor)
+        }
+        console.log(despesasFiltrda)
+        return despesasFiltrdas
+    }
+    remover(id) {
+        localStorage.removeItem(id)
     }
 }
 let bd = new Bd()
@@ -87,11 +125,13 @@ function cadastrarDespesa() {
         $('#ResgtriaDespesa').modal('show')
     }
 }
-function carregarListarsDespesas() {
-    let despesas = Array()
-    despesas = bd.recuperarTodosRegistros()
+function carregarListarsDespesas(despesas = Array(), filtro = false) {
+    if (despesas.length === 0 && filtro == false) {
+        despesas = bd.recuperarTodosRegistros()
+    }
 
     let listaDespesas = document.getElementById('listaDespesas')
+    listaDespesas.innerHTML = ''
     /*
       <tr>
               <td>2018</td>
@@ -102,35 +142,73 @@ function carregarListarsDespesas() {
             </tr>
     */
     despesas.forEach(function (d) {
-
         let linha = listaDespesas.insertRow()
-
         linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`
-
         switch (d.tipo) {
-            case '1': d.tipo = 'Alimentação'
-                break
-            case '2': d.tipo = 'Educação'
-                break
-            case '3': d.tipo = 'Lazer'
-                break
-            case '4': d.tipo = 'Saúde'
-                break
-            case '5': d.tipo = 'transporte'
-                break
+            case '1': d.tipo = 'Alimentação'; break
+            case '2': d.tipo = 'Educação'; break
+            case '3': d.tipo = 'Lazer'; break
+            case '4': d.tipo = 'Saúde'; break
+            case '5': d.tipo = 'Transporte'; break
         }
         linha.insertCell(1).innerHTML = d.tipo
         linha.insertCell(2).innerHTML = d.descricao
         linha.insertCell(3).innerHTML = d.valor
+
+        // CORREÇÃO APLICADA AQUI - Lógica do botão movida para DENTRO do forEach
+        let btn = document.createElement("button")
+        btn.className = 'btn btn-danger';
+        btn.innerHTML = '<i class="fas fa-times"></i>'
+        btn.id = `id_despesa_${d.id}`;
+        btn.onclick = function () {
+            let idParaApagar = this.id.replace('id_despesa_', '')
+            $('#apagaDespesa').modal('show');
+            $('#apagaDespesa').data('id_para_excluir', idParaApagar);
+            //alert(id)
+            //getElementById('idParaApagar')
+            //bd.remover(id)
+            //window.location.reload()
+        }
+        linha.insertCell(4).append(btn);
+        console.log(d)
     })
+
 }
-// Adicione este código ao final do seu arquivo app.js
+
+function pesquisarDespesa() {
+    let ano = document.getElementById('ano').value
+    let mes = document.getElementById('mes').value
+    let dia = document.getElementById('dia').value
+    let tipo = document.getElementById('tipo').value
+    let descricao = document.getElementById('descricao').value
+    let valor = document.getElementById('valor').value
+
+    let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor)
+
+
+    let despesas = bd.pesquisar(despesa)
+
+
+    let listaDespesas = document.getElementById('listaDespesas')
+    carregarListarsDespesas(despesas, true)
+}
 
 $(document).ready(function () {
-    // Seleciona o modal pelo ID e escuta pelo evento 'hidden.bs.modal'
-    $('#ResgtriaDespesa').on('hidden.bs.modal', function (e) {
-        // Quando o modal estiver completamente escondido,
-        // devolve o foco para o botão de adicionar despesa.
-        $('#btnAdicionarDespesa').focus();
-    })
+    // Evento para o modal de CADASTRO
+    $('#ResgtriaDespesa').on('hidden.bs.modal', function (e) {
+        $('#btnAdicionarDespesa').focus();
+    });
+
+    // Evento para o modal de EXCLUSÃO (agora no lugar certo)
+    $('#btnConfirmarExclusao').on('click', function () {
+
+        // 1. Lendo o ID que guardamos na "etiqueta" do modal
+        let id = $('#apagaDespesa').data('id_para_excluir');
+
+        // 2. Chamando a função para remover a despesa do localStorage
+        bd.remover(id);
+
+        // 3. Atualizando a página para a linha sumir da tabela
+        window.location.reload();
+    });
 });
