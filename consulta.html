@@ -4,22 +4,14 @@
   <meta charset="utf-8" />
   <title>Orçamento pessoal</title>
 
-  <!-- Bootstrap início -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-  <!-- Bootstrap fim -->
-
-  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" ... >
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" ... ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ... ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" ... ></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
   <script src="app.js"></script>
 
@@ -53,24 +45,20 @@
   </nav>
 
   <div class="container">
-    <div class="row mb-5">
-      <div class="col">
-        <h1 class="display-4">Consulta de despesas</h1>
-      </div>
-    </div>
+   <div class="row mb-3">
+  <div class="col">
+    <h1 class="display-4">Consulta de despesas</h1>
+  </div>
+</div>
 
+<div class="row mb-5 justify-content-center">
+  <div class="col-md-8 col-lg-6"> <canvas id="graficoDespesasPizza"></canvas>
+  </div>
+</div>
     <div class="row mb-2">
       <div class="col-md-2">
         <select class="form-control" id="ano">
           <option value="">Ano</option>
-          <option value="2018">2018</option>
-          <option value="2019">2019</option>
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
         </select>
       </div>
 
